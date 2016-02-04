@@ -17,6 +17,9 @@
         }
     ],
     "extra": {
+        "branch-alias": {
+            "master-dev": "0.x-dev"
+        },
         "installer-name": "masquerade"
     },
     "prefer-stable": true,
