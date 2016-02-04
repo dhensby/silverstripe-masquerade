@@ -11,7 +11,7 @@ class MasqueradeSecurityAdminExtension extends Extension {
                 new GridFieldMasqueradeButton()
             )
             ->getComponentByType('GridFieldDetailForm')
-                ->setItemRequestClass('MasqueradeGridFieldDetailForm_ItemRequest')
+            ->setItemRequestClass('MasqueradeGridFieldDetailForm_ItemRequest')
         ;
     }
 
