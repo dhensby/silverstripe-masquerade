@@ -22,4 +22,14 @@ class MasqueradeMemberExtension extends DataExtension
         return Permission::check('ADMIN', 'any', $member);
     }
 
+    public function masquerade()
+    {
+        // don't use $member->logIn() because it triggers tracking and breaks remember me tokens, etc.
+        $sessionData = Session::get_all();
+        Session::clear_all();
+        Session::set("loggedInAs", $this->getOwner()->ID);
+        Session::set('Masquerade.Old', $sessionData);
+        return $this->getOwner();
+    }
+
 }

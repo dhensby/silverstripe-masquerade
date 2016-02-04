@@ -8,7 +8,6 @@ class MasqueradeMemberTest extends SapphireTest {
     {
         $this->logInWithPermission('ADMIN');
         $admin = Member::currentUser();
-
         $member = $this->objFromFixture('Member', 'user');
 
         //added function correctly
@@ -37,6 +36,20 @@ class MasqueradeMemberTest extends SapphireTest {
 
         // member can't masquerade as an admin
         $this->assertFalse($admin->canMasquerade());
+    }
+
+    public function testMasquerade()
+    {
+        $this->logInWithPermission('ADMIN');
+        $admin = Member::currentUser();
+        $member = $this->objFromFixture('Member', 'user');
+
+        $this->assertEquals($admin->ID, Session::get('loggedInAs'));
+
+        $member->masquerade();
+
+        $this->assertEquals($member->ID, Session::get('loggedInAs'));
+        $this->assertEquals($admin->ID, Session::get('Masquerade.Old.loggedInAs'));
     }
 
 }
