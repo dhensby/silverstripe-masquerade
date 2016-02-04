@@ -23,26 +23,4 @@ class MasqueradeSecurityController extends Security {
         }
     }
 
-    /**
-     * Returns the SS_HTTPResponse object that this controller is building up.
-     * Can be used to set the status code and headers
-     */
-    public function getResponse() {
-        if (!$this->response) {
-            $this->setResponse(new SS_HTTPResponse());
-        }
-        return $this->response;
-    }
-
-    /**
-     * Sets the SS_HTTPResponse object that this controller is building up.
-     *
-     * @param SS_HTTPResponse $response
-     * @return Controller
-     */
-    public function setResponse(SS_HTTPResponse $response) {
-        $this->response = $response;
-        return $this;
-    }
-
 }

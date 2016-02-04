@@ -14,7 +14,7 @@ class MasqueradeSecurityControllerTest extends SapphireTest {
 
         $this->assertEquals($member->ID, Session::get('loggedInAs'));
         $sc = new MasqueradeSecurityController();
-        $sc->init();
+        //$sc->init();
         $sc->logout(false);
 
         $this->assertEquals($admin->ID, Session::get('loggedInAs'));
