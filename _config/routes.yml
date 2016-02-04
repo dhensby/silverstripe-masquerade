@@ -6,4 +6,4 @@ After:
 ---
 Director:
   rules:
-    'Security//$Action/$ID/$OtherID': 'LogoutController'
+    'Security//$Action/$ID/$OtherID': 'MasqueradeSecurityController'

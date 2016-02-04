@@ -4,8 +4,6 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider
 {
 
     /**
-     * Add a column 'Masquerade'
-     *
      * @param GridField $gridField
      * @param array $columns
      */
@@ -57,10 +55,9 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider
     /**
      * Which GridField actions are this component handling.
      *
-     * @param GridField $gridField
      * @return array
      */
-    public function getActions($gridField)
+    public function getActions()
     {
         return array('masquerade');
     }
@@ -85,20 +82,6 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider
         ));
 
         return $data->renderWith('GridFieldMasqueradeButton');
-    }
-
-    /**
-     * Handle the actions and apply any changes to the GridField.
-     *
-     * @param GridField $gridField
-     * @param string $actionName
-     * @param mixed $arguments
-     * @param array $data - form data
-     *
-     * @return void
-     */
-    public function handleAction(GridField $gridField, $actionName, $arguments, $data)
-    {
     }
 
 

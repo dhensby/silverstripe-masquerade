@@ -1,6 +1,6 @@
 <?php
 
-class LogoutController extends Security {
+class MasqueradeSecurityController extends Security {
 
     private static $allowed_actions = array(
         'logout',
@@ -8,7 +8,7 @@ class LogoutController extends Security {
 
     public function logout($redirect = true)
     {
-        if ($masqueraderID = Session::get('Masquerade.Old.loggedInAs')) {
+        if (Session::get('Masquerade.Old.loggedInAs')) {
             $oldSession = Session::get('Masquerade.Old');
             Session::clear_all();
             foreach ($oldSession as $name => $val) {

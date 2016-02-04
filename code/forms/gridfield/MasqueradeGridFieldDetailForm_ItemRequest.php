@@ -6,7 +6,7 @@ class MasqueradeGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Item
         'masquerade',
     );
 
-    public function masquerade($request)
+    public function masquerade()
     {
         $member = $this->getRecord();
         if (!$member instanceof Member || !$member->canMasquerade()) {
