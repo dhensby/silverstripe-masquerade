@@ -4,3 +4,6 @@ Name: masqueradeconfig
 Member:
   extensions:
     - MasqueradeMemberExtension
+SecurityAdmin:
+  extensions:
+    - MasqueradeSecurityAdminExtension

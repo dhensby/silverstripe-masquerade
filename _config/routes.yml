@@ -1,0 +1,9 @@
+---
+Name: coreroutes
+After:
+  - '#rootroutes'
+  - '#modelascontrollerroutes'
+---
+Director:
+  rules:
+    'Security//$Action/$ID/$OtherID': 'LogoutController'
