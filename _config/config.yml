@@ -7,3 +7,7 @@ Member:
 SecurityAdmin:
   extensions:
     - MasqueradeSecurityAdminExtension
+LeftAndMain:
+  extra_requirements_css:
+    masquerade/css/masquerade.css:
+      media: screen

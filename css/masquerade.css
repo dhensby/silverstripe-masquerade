@@ -1,0 +1,17 @@
+.cms table.ss-gridfield-table tbody td a.masquerade-link {
+    background:transparent url(../images/mask.png) center center no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-indent: 9999em;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-left: 0.8em;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), not all, not all, not all, only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    .cms table.ss-gridfield-table tbody td a.masquerade-link {
+        background-image: url(../images/mask-2x.png);
+        background-size: 16px 16px;
+    }
+}

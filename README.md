@@ -37,3 +37,7 @@ TBC
 ## License
 
 Please see [LICENSE.md](./LICENSE.md)
+
+## Credits
+
+Mask logo by [Travis Beckham](https://thenounproject.com/squidfingers/)
