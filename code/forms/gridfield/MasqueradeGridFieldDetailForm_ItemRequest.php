@@ -8,7 +8,7 @@ class MasqueradeGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_Item
 
     public function masquerade()
     {
-        $member = $this->getRecord();
+        $member = $this->hasMethod('getRecord') ? $this->getRecord() : $this->record;
         if (!$member->hasMethod('canMasquerade') || !$member->hasMethod('masquerade') || !$member->canMasquerade()) {
             Security::permissionFailure($this->getController());
             return;
