@@ -41,3 +41,5 @@ Please see [LICENSE.md](./LICENSE.md)
 ## Credits
 
 Mask logo by [Travis Beckham](https://thenounproject.com/squidfingers/)
+
+3.1.x Compatibility fix by @axyr
