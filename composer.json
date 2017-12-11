@@ -3,11 +3,11 @@
     "description": "SilverStripe module to allow you to masquerade as other users",
     "type": "silverstripe-module",
     "require": {
-        "php": ">=5.3.3,<7",
+        "php": "^5.3.3 || ^7",
         "silverstripe/framework": "^3.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7"
+        "phpunit/phpunit": "^3 || ^4 || ^5"
     },
     "license": "ISC",
     "authors": [
