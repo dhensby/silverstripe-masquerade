@@ -1,13 +1,22 @@
 ---
 Name: masqueradeconfig
 ---
-Member:
+SilverStripe\Admin\SecurityAdmin:
   extensions:
-    - MasqueradeMemberExtension
-SecurityAdmin:
+    - DHensby\SilverStripeMasquerade\Extensions\SecurityAdminExtension
+SilverStripe\Security\Member:
   extensions:
-    - MasqueradeSecurityAdminExtension
-LeftAndMain:
-  extra_requirements_css:
-    masquerade/css/masquerade.css:
-      media: screen
+    - DHensby\SilverStripeMasquerade\Extensions\MemberExtension
+---
+Name: masquerademiddleware
+After:
+  - '#coresecurity'
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
+    properties:
+      Middlewares:
+        MasqueradeMiddleware: '%$DHensby\SilverStripeMasquerade\Control\MasqueradeMiddleware'
+SilverStripe\Security\MemberAuthenticator\LogoutHandler:
+  extensions:
+    - DHensby\SilverStripeMasquerade\Extensions\LogoutHandlerExtension
