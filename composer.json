@@ -13,6 +13,11 @@
             "DHensby\\SilverStripeMasquerade\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "DHensby\\SilverStripeMasquerade\\Test\\": "tests/"
+        }
+    },
     "license": "ISC",
     "authors": [
         {

@@ -7,27 +7,24 @@ dist: precise
 language: php
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
+  - 7.3
 env:
-  - DB=MYSQL CORE_RELEASE=3.6
+  - DB=MYSQL CORE_RELEASE=4.4
 
 matrix:
   include:
     - php: 7.1
-      env: DB=MYSQL CORE_RELEASE=3
+      env: DB=MYSQL CORE_RELEASE=4.5
     - php: 5.6
-      env: DB=PGSQL CORE_RELEASE=3.5
+      env: DB=PGSQL CORE_RELEASE=4.4
 
 before_script:
   - composer self-update || true
-  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
-  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
-  - cd ~/builds/ss
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
-  - vendor/bin/phpunit masquerade/tests
+  - vendor/bin/phpunit tests

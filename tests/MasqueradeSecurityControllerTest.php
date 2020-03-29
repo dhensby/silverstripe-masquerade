@@ -1,5 +1,11 @@
 <?php
 
+namespace DHensby\SilverStripeMasquerade\Test;
+
+use SilverStripe\Control\Session;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Security\Security;
+
 class MasqueradeSecurityControllerTest extends SapphireTest {
 
     protected static $fixture_file = 'MasqueradeMemberTest.yml';
@@ -7,12 +13,12 @@ class MasqueradeSecurityControllerTest extends SapphireTest {
     public function testLogout()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Member::currentUser();
+        $admin = Security::getCurrentUser();
         $member = $this->objFromFixture('Member', 'user');
 
         $member->masquerade();
 
-        $this->assertEquals($member->ID, Session::get('loggedInAs'));
+        $this->assertEquals($member->ID, Security::getCurrentUser()->ID);
         $sc = new MasqueradeSecurityController();
         //$sc->init();
         $sc->logout(false);
