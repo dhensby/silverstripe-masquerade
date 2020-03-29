@@ -1,5 +1,11 @@
 <?php
 
+namespace DHensby\SilverStripeMasquerade\Test;
+
+use SilverStripe\Control\Controller;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Security\Security;
+
 class MasqueradeMemberTest extends SapphireTest {
 
     protected static $fixture_file = 'MasqueradeMemberTest.yml';
@@ -7,7 +13,7 @@ class MasqueradeMemberTest extends SapphireTest {
     public function testCanMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Member::currentUser();
+        $admin = Security::getCurrentUser();
         $member = $this->objFromFixture('Member', 'user');
 
         //added function correctly
@@ -30,7 +36,7 @@ class MasqueradeMemberTest extends SapphireTest {
         // member cannot masquerade as themeselves
         $this->assertFalse($member->canMasquerade($member));
 
-        $member->logIn();
+        Security::setCurrentUser($member);
         // member can't masquerade as themselves
         $this->assertFalse($member->canMasquerade());
 
@@ -41,15 +47,17 @@ class MasqueradeMemberTest extends SapphireTest {
     public function testMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Member::currentUser();
+        $admin = Security::getCurrentUser();
         $member = $this->objFromFixture('Member', 'user');
 
-        $this->assertEquals($admin->ID, Session::get('loggedInAs'));
+        $session = Controller::curr()->getRequest()->getSession();
+
+        $this->assertEquals($admin->ID, $session->get('loggedInAs'));
 
         $member->masquerade();
 
-        $this->assertEquals($member->ID, Session::get('loggedInAs'));
-        $this->assertEquals($admin->ID, Session::get('Masquerade.Old.loggedInAs'));
+        $this->assertEquals($member->ID, $session->get('loggedInAs'));
+        $this->assertEquals($admin->ID, $session->get('masqueradingAs'));
     }
 
 }
