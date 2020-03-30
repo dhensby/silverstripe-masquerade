@@ -4,6 +4,7 @@ namespace DHensby\SilverStripeMasquerade\Test;
 
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
 
 class MasqueradeMemberTest extends FunctionalTest
 {
@@ -13,7 +14,7 @@ class MasqueradeMemberTest extends FunctionalTest
     public function testCanMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Member::currentUser();
+        $admin = Security::getCurrentUser();
         $member = $this->objFromFixture(Member::class, 'user');
 
         //added function correctly
@@ -25,7 +26,7 @@ class MasqueradeMemberTest extends FunctionalTest
         //admin can't masquerade as themselves
         $this->assertFalse($admin->canMasquerade());
 
-        $admin->logOut();
+        Security::setCurrentUser(null);
 
         // no logged in user can't masquerade
         $this->assertFalse($member->canMasquerade());
@@ -36,7 +37,7 @@ class MasqueradeMemberTest extends FunctionalTest
         // member cannot masquerade as themeselves
         $this->assertFalse($member->canMasquerade($member));
 
-        $member->logIn();
+        Security::setCurrentUser($member);
         // member can't masquerade as themselves
         $this->assertFalse($member->canMasquerade());
 
@@ -47,7 +48,7 @@ class MasqueradeMemberTest extends FunctionalTest
     public function testMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Member::currentUser();
+        $admin = Security::getCurrentUser();
         $member = $this->objFromFixture(Member::class, 'user');
 
         $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
