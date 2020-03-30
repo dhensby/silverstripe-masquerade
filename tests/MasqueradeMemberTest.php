@@ -2,19 +2,19 @@
 
 namespace DHensby\SilverStripeMasquerade\Test;
 
-use SilverStripe\Control\Controller;
-use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Security\Security;
+use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Security\Member;
 
-class MasqueradeMemberTest extends SapphireTest {
+class MasqueradeMemberTest extends FunctionalTest
+{
 
     protected static $fixture_file = 'MasqueradeMemberTest.yml';
 
     public function testCanMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Security::getCurrentUser();
-        $member = $this->objFromFixture('Member', 'user');
+        $admin = Member::currentUser();
+        $member = $this->objFromFixture(Member::class, 'user');
 
         //added function correctly
         $this->assertTrue($member->hasMethod('canMasquerade'));
@@ -36,7 +36,7 @@ class MasqueradeMemberTest extends SapphireTest {
         // member cannot masquerade as themeselves
         $this->assertFalse($member->canMasquerade($member));
 
-        Security::setCurrentUser($member);
+        $member->logIn();
         // member can't masquerade as themselves
         $this->assertFalse($member->canMasquerade());
 
@@ -47,17 +47,16 @@ class MasqueradeMemberTest extends SapphireTest {
     public function testMasquerade()
     {
         $this->logInWithPermission('ADMIN');
-        $admin = Security::getCurrentUser();
-        $member = $this->objFromFixture('Member', 'user');
+        $admin = Member::currentUser();
+        $member = $this->objFromFixture(Member::class, 'user');
 
-        $session = Controller::curr()->getRequest()->getSession();
+        $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
 
-        $this->assertEquals($admin->ID, $session->get('loggedInAs'));
+        $this->session()->set('masqueradingAs', $member->ID);
+        // TODO: this should make a new request allowing the session middleware to do its thing
+        $this->get("/", $this->session());
 
-        $member->masquerade();
-
-        $this->assertEquals($member->ID, $session->get('loggedInAs'));
-        $this->assertEquals($admin->ID, $session->get('masqueradingAs'));
+        $this->assertEquals($member->ID, $this->session()->get('loggedInAs'));
+        $this->assertEquals($admin->ID, $this->session()->get('Masquerade.Old.loggedInAs'));
     }
-
 }
