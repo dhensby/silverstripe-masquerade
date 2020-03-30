@@ -1,4 +1,4 @@
-Member:
+SilverStripe\Security\Member:
   user:
     FirstName: User
     Surname: Name

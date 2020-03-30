@@ -2,11 +2,12 @@
 
 namespace DHensby\SilverStripeMasquerade\Test;
 
-use SilverStripe\Control\Session;
-use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Security\Member;
+use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Security;
 
-class MasqueradeSecurityControllerTest extends SapphireTest {
+class MasqueradeSecurityControllerTest extends FunctionalTest
+{
 
     protected static $fixture_file = 'MasqueradeMemberTest.yml';
 
@@ -14,17 +15,14 @@ class MasqueradeSecurityControllerTest extends SapphireTest {
     {
         $this->logInWithPermission('ADMIN');
         $admin = Security::getCurrentUser();
-        $member = $this->objFromFixture('Member', 'user');
+        $member = $this->objFromFixture(Member::class, 'user');
 
-        $member->masquerade();
+        $this->session()->set('masqueradingAs', $member->ID);
 
-        $this->assertEquals($member->ID, Security::getCurrentUser()->ID);
-        $sc = new MasqueradeSecurityController();
-        //$sc->init();
-        $sc->logout(false);
+        // TODO: Need to trigger new request to allow middleware to do its thing
 
-        $this->assertEquals($admin->ID, Session::get('loggedInAs'));
-
+        $this->assertEquals($member->ID, $this->session()->get('loggedInAs'));
+        Security::setCurrentUser(null);
+        $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
     }
-
 }
