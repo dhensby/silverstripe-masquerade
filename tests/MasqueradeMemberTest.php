@@ -54,10 +54,15 @@ class MasqueradeMemberTest extends FunctionalTest
         $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
 
         $this->session()->set('masqueradingAs', $member->ID);
-        // TODO: this should make a new request allowing the session middleware to do its thing
+
+        // make a new request allowing the session middleware to do its thing
         $this->get("/", $this->session());
 
-        $this->assertEquals($member->ID, $this->session()->get('loggedInAs'));
-        $this->assertEquals($admin->ID, $this->session()->get('Masquerade.Old.loggedInAs'));
+        // we've been logged in as the user
+        $this->assertEquals($member->ID, Security::getCurrentUser()->ID);
+
+        $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
+        $this->assertEquals($member->ID, $this->session()->get('masqueradingAs'));
+
     }
 }
