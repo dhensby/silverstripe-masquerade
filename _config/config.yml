@@ -11,6 +11,7 @@ SilverStripe\Security\Member:
 Name: masquerademiddleware
 After:
   - '#coresecurity'
+  - '#session-manager-middleware'
 ---
 SilverStripe\Core\Injector\Injector:
   SilverStripe\Control\Director:
