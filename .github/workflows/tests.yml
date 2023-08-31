@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Install dependencies
-        run: npm i --global @commitlint/{cli,config-conventional}
+        run: npm install --global @commitlint/{cli,config-conventional}
       - name: Lint commit
         if: github.event_name == 'push'
         run: npx commitlint --from HEAD~1 --to HEAD --verbose --extends @commitlint/config-conventional
@@ -126,7 +126,7 @@ jobs:
         with:
           node-version: "lts/*"
       - name: Install dependencies
-        run: npm install --global semantic-release@21 @semantic-release/git@10 @semantic-release/changelog@6 @semantic-release/changelog@6 @commitlint/config-conventional@17 conventional-changelog-conventionalcommits@7
+        run: npm install --global @commitlint/{cli@17,config-conventional@17} semantic-release@21 @semantic-release/{changelog@6,commit-analyzer@10,git@10,github@9,release-notes-generator@11}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
