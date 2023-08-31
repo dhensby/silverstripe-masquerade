@@ -1,14 +1,68 @@
-name: Tests
+name: Lint, Test & Release
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    name: PHP ${{ matrix.php_version }}
+  commitlint:
+    name: Lint commits
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: npm i --global @commitlint/{cli,config-conventional}
+      - name: Lint commit
+        if: github.event_name == 'push'
+        run: npx commitlint --from HEAD~1 --to HEAD --verbose --extends @commitlint/config-conventional
+      - name: Lint commits
+        if: github.event_name == 'pull_request'
+        run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose --extends @commitlint/config-conventional
+  codelint:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Use PHP 7.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.1
+          tools: composer:v2
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php7.1-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-php7.1-
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts --no-plugins
+      - name: Lint code
+        run: composer run-script lint
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs:
+      - commitlint
+      - codelint
     env:
       DB: mysql
     strategy:
@@ -25,29 +79,56 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Use PHP ${{ matrix.node_version }}
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php_version }}
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php${{ matrix.php_version }}-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php${{ matrix.php_version }}-
-
-    - name: Install dependencies
-      run: composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader --verbose --profile
-
-    - name: Run test suite
-      run: vendor/bin/phpunit tests
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Use PHP ${{ matrix.php_version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php_version }}
+          tools: composer:v2
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php${{ matrix.php_version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-php${{ matrix.php_version }}-
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts --no-plugins
+      - name: Test code
+        run: composer run-script test
+  release:
+    name: Release
+    concurrency: release
+    if: ${{ github.event_name == 'push' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    needs:
+      - commitlint
+      - codelint
+      - test
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install --global semantic-release@21 @semantic-release/git@10 @semantic-release/changelog@6
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
