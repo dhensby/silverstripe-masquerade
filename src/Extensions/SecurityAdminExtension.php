@@ -12,7 +12,7 @@ class SecurityAdminExtension extends Extension
     public function updateEditForm(Form $form)
     {
         /** @var GridField $gridField */
-        $gridField = $form->Fields()->dataFieldByName('Members');
+        $gridField = $form->Fields()->dataFieldByName('users');
         $gridField->getConfig()
             ->addComponent(new GridFieldMasqueradeButton());
     }
