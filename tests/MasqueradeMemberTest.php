@@ -63,6 +63,5 @@ class MasqueradeMemberTest extends FunctionalTest
 
         $this->assertEquals($admin->ID, $this->session()->get('loggedInAs'));
         $this->assertEquals($member->ID, $this->session()->get('masqueradingAs'));
-
     }
 }
