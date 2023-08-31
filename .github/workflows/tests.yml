@@ -126,7 +126,7 @@ jobs:
         with:
           node-version: "lts/*"
       - name: Install dependencies
-        run: npm install --global semantic-release@21 @semantic-release/git@10 @semantic-release/changelog@6 @semantic-release/changelog@6 @commitlint/config-conventional@17
+        run: npm install --global semantic-release@21 @semantic-release/git@10 @semantic-release/changelog@6 @semantic-release/changelog@6 @commitlint/config-conventional@17 conventional-changelog-conventionalcommits@7
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
