@@ -1,10 +1,6 @@
 # SilverStripe Masquerade Module
 
-[![Build Status](https://travis-ci.org/dhensby/silverstripe-masquerade.svg?branch=master)](https://travis-ci.org/dhensby/silverstripe-masquerade)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/badges/build.png?b=master)](https://scrutinizer-ci.com/g/dhensby/silverstripe-masquerade/build-status/master)
-
+[![Lint, Test & Release](https://github.com/dhensby/silverstripe-masquerade/actions/workflows/tests.yml/badge.svg)](https://github.com/dhensby/silverstripe-masquerade/actions/workflows/tests.yml)
 
 ## About
 
