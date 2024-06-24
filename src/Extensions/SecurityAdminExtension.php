@@ -13,6 +13,9 @@ class SecurityAdminExtension extends Extension
     {
         /** @var GridField $gridField */
         $gridField = $form->Fields()->dataFieldByName('users');
+        if (!$gridField) {
+            return;
+        }
         $gridField->getConfig()
             ->addComponent(new GridFieldMasqueradeButton());
     }
