@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DHensby\SilverStripeMasquerade\Test;
 
 use SilverStripe\Control\Director;
@@ -7,12 +9,12 @@ use SilverStripe\Security\Member;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\Security;
 
-class MasqueradeSecurityControllerTest extends FunctionalTest
+final class MasqueradeSecurityControllerTest extends FunctionalTest
 {
 
     protected static $fixture_file = 'MasqueradeMemberTest.yml';
 
-    public function testLogout()
+    public function testLogout(): void
     {
         $this->markTestSkipped('not currently working');
 

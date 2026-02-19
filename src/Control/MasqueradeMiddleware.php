@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DHensby\SilverStripeMasquerade\Control;
 
 use SilverStripe\Control\HTTPRequest;
