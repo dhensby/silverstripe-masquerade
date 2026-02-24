@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/dhensby/silverstripe-masquerade/compare/v1.0.1...v2.0.0) (2026-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* Update for use with SS6. SS6+ is now the minimum supported version.
+
+### Features
+
+* add SS6 support ([628862a](https://github.com/dhensby/silverstripe-masquerade/commit/628862a95dec6e116079ef72e9db7a1ae1bd38d1))
+
 ## [1.0.1](https://github.com/dhensby/silverstripe-masquerade/compare/v1.0.0...v1.0.1) (2024-06-24)
 
 
