@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DHensby\SilverStripeMasquerade\Forms\GridField;
 
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPRequest;
@@ -13,9 +17,7 @@ use SilverStripe\Forms\GridField\GridField_ColumnProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\ORM\ValidationException;
 use SilverStripe\Security\Member;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\SSViewer;
 
 class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_ActionMenuLink, GridField_URLHandler
@@ -29,7 +31,7 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
      * @param GridField $gridField
      * @param array $columns
      */
-    public function augmentColumns($gridField, &$columns)
+    public function augmentColumns($gridField, &$columns): void
     {
         if (!in_array('Actions', $columns)) {
             $columns[] = 'Actions';
@@ -61,6 +63,7 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
         if ($columnName == 'Actions') {
             return ['title' => ''];
         }
+
         return [];
     }
 
@@ -79,9 +82,8 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
      * Which GridField actions are this component handling.
      *
      * @param $gridField
-     * @return array
      */
-    public function getActions($gridField)
+    public function getActions($gridField): array
     {
         return ['masquerade'];
     }
@@ -110,7 +112,7 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
             return null;
         }
 
-        $data = new ArrayData([
+        $data = ArrayData::create([
             'Link' => $this->getUrl($gridField, $record, $columnName),
             'ExtraClass' => 'grid-field__icon-action--hidden-on-hover font-icon-eye btn--icon-large action-menu--handled'
         ]);
@@ -132,18 +134,16 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
         return $action ? GridField_ActionMenuItem::DEFAULT_GROUP: null;
     }
 
-    public function handleMasquerade(GridField $gridField, HTTPRequest $request)
+    public function handleMasquerade(GridField $gridField, HTTPRequest $request): ?HTTPResponse
     {
         /** @var DataObject $item */
         $item = $gridField->getList()->byID($request->param('ID'));
         if (!$item) {
-            return;
+            return null;
         }
 
         if (!$item->canMasquerade()) {
-            throw new ValidationException(
-                _t(__CLASS__ . '.MasqueradePermissionsFailure', 'No masquerade permissions')
-            );
+            throw ValidationException::create(_t(__CLASS__ . '.MasqueradePermissionsFailure', 'No masquerade permissions'));
         }
 
         if (Member::config()->get('session_regenerate_id') && !Director::is_cli() && !headers_sent()) {
@@ -152,7 +152,7 @@ class GridFieldMasqueradeButton implements GridField_ColumnProvider, GridField_A
 
         $request->getSession()->set('masqueradingAs', $item->ID);
 
-        $response = new HTTPResponse();
+        $response = HTTPResponse::create();
         $response->addHeader('X-Reload', true);
         $response->addHeader('X-ControllerURL', Director::absoluteBaseURL());
         return $response;

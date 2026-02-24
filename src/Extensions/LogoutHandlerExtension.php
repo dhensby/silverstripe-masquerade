@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DHensby\SilverStripeMasquerade\Extensions;
 
 use SilverStripe\Control\Controller;
@@ -11,10 +13,10 @@ use SilverStripe\Security\Security;
 
 class LogoutHandlerExtension extends Extension
 {
-    public function beforeLogout()
+    public function beforeLogout(): void
     {
         /** @var HTTPRequest $request */
-        $request = $this->owner->getRequest();
+        $request = $this->getOwner()->getRequest();
         $session = $request->getSession();
 
         // If we're currently masquerading, we only want to stop masquerading, not *actually* log out
@@ -34,19 +36,19 @@ class LogoutHandlerExtension extends Extension
      */
     protected function redirectAfterLogout()
     {
-        $backURL = $this->owner->getBackURL();
+        $backURL = $this->getOwner()->getBackURL();
         if ($backURL) {
-            return $this->owner->redirect($backURL);
+            return $this->getOwner()->redirect($backURL);
         }
 
         $link = Security::config()->get('login_url');
-        $referer = $this->owner->getReturnReferer();
+        $referer = $this->getOwner()->getReturnReferer();
         if ($referer) {
             $link = Controller::join_links($link, '?' . http_build_query([
                 'BackURL' => Director::makeRelative($referer)
             ]));
         }
 
-        return $this->owner->redirect($link);
+        return $this->getOwner()->redirect($link);
     }
 }

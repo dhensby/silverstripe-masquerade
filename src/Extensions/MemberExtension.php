@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DHensby\SilverStripeMasquerade\Extensions;
 
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 
-class MemberExtension extends DataExtension
+class MemberExtension extends Extension
 {
     /**
      * @param mixed $member
