@@ -9,12 +9,6 @@
         "phpunit/phpunit": "*",
         "squizlabs/php_codesniffer": "*"
     },
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true,
-            "silverstripe/vendor-plugin": true
-        }
-    },
     "scripts": {
         "lint": "phpcs src/ tests/",
         "lint:fix": "phpcbf src/ tests/",
