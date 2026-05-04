@@ -12,12 +12,17 @@ report.
 
 Please see the [documentation](./docs/en/index.md)
 
+## Requirements
+
+- SilverStripe Framework ^6
+- PHP 8.1+
+
 ## Installation
 
-Installation is only supported via composer
+Installation is only supported via composer:
 
 ```sh
-$ composer require dhensby/silverstripe-masquerade
+composer require dhensby/silverstripe-masquerade
 ```
 
 ## Contributing
@@ -25,10 +30,6 @@ $ composer require dhensby/silverstripe-masquerade
 Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines regarding testing and development instructions.
 
 A change log is maintained in [CHANGELOG.md](CHANGELOG.md)
-
-## Reporting security issues
-
-TBC
 
 ## License
 
